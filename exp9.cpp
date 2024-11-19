@@ -1,37 +1,61 @@
+
 #include <iostream>
 using namespace std;
 
-class Point {
+class ComplexNumber
+{
 private:
-    int x;
-    int y;
+    int real;
+    int imaginary;
 
 public:
-    // Default constructor
-    Point() {
-        x = 0;
-        y = 0;
-        cout << "Default constructor called" << endl;
+    ComplexNumber(int real, int imaginary)
+    {
+        this->real = real;
+        this->imaginary = imaginary;
     }
-
-    // Parameterized constructor
-    Point(int a, int b) {
-        x = a;
-        y = b;
-        cout << "Parameterized constructor called" << endl;
+    void print() { cout << real << " + i" << imaginary << endl; }
+    ComplexNumber operator+(ComplexNumber c2)
+    {
+        ComplexNumber c3(0, 0);
+        c3.real = this->real + c2.real;
+        c3.imaginary = this->imaginary + c2.imaginary;
+        return c3;
     }
-
-    void display() {
-        cout << "Point: (" << x << ", " << y << ")" << endl;
+    ComplexNumber operator-(ComplexNumber c2)
+    {
+        ComplexNumber c3(0, 0);
+        c3.real = this->real - c2.real;
+        c3.imaginary = this->imaginary - c2.imaginary;
+        return c3;
     }
+    friend ostream &operator<<(ostream &o1, ComplexNumber a1);
+    friend istream &operator>>(istream &o1, ComplexNumber &a1);
 };
+ostream &operator<<(ostream &o1, const ComplexNumber a1)
+{
+    o1 << a1.real << "+" << a1.imaginary << "i" << endl;
 
-int main() {
-    Point p1;
-    p1.display();
+    return o1;
+}
+istream &operator>>(istream &o1, ComplexNumber &a1)
+{
+    cout << "Enter real part: ";
+    o1 >> a1.real;
+    cout << "Enter imaginary part: ";
+    o1 >> a1.imaginary;
 
-    Point p2(3, 4);
-    p2.display();
-
-    return 0;
+    return o1;
+}
+int main()
+{
+    ComplexNumber c1(45, 58);
+    ComplexNumber c2(4, 9);
+    ComplexNumber c3 = c1 + c2;
+    c3.print();
+    cout << c3;
+    ComplexNumber c4(0,0);
+    cin>>c4;
+    cout<< c4;
+        return 0;
 }
