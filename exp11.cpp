@@ -1,55 +1,88 @@
 #include <iostream>
 using namespace std;
 
-class Product {
-    string productName;
-    int quantity;
+template <typename T>
+class Stack {
+private:
+    T* arr;
+    int capacity;
+    int top;
 
 public:
-    // Default constructor
-    Product() {
-        productName = "Unnamed Product";
-        quantity = 0;
+    Stack(int size) {
+        capacity = size;
+        arr = new T[capacity];
+        top = -1;
     }
 
-    // Parameterized constructor
-    Product(string name, int qty) {
-        productName = name;
-        quantity = qty;
+    ~Stack() {
+        delete[] arr;
     }
 
-    // Add stock
-    void addStock(int amount) {
-        quantity += amount;
-        cout << "Added " << amount << " of " << productName << endl;
-    }
-
-    // Remove stock
-    void removeStock(int amount) {
-        if (amount > quantity) {
-            cout << "Not enough stock!" << endl;
-        } else {
-            quantity -= amount;
-            cout << "Removed " << amount << " of " << productName << endl;
+    void push(T element) {
+        if (top == capacity - 1) {
+            cout << "Stack overflow! Cannot push " << element << endl;
+            return;
         }
+        arr[++top] = element;
     }
 
-    // Display product details
-    void display() const {
-        cout << "Product Name: " << productName << endl;
-        cout << "Quantity: " << quantity << endl;
-        cout << endl;
+    void pop() {
+        if (isEmpty()) {
+            cout << "Stack underflow! Cannot pop an element." << endl;
+            return;
+        }
+        top--;
+    }
+
+    T peek() const {
+        if (isEmpty()) {
+            throw runtime_error("Stack is empty! No element to peek.");
+        }
+        return arr[top];
+    }
+
+    bool isEmpty() const {
+        return top == -1;
+    }
+
+    bool isFull() const {
+        return top == capacity - 1;
+    }
+
+    int size() const {
+        return top + 1;
     }
 };
 
 int main() {
-    Product product("Laptop", 10);
-    cout << "Product Details:" << endl;
-    product.display();
+    try {
+        Stack<int> integerStack(5);
 
-    product.addStock(5);
-    product.removeStock(3);
-    product.display();
+        integerStack.push(10);
+        integerStack.push(20);
+        integerStack.push(30);
+
+        cout << "Top element: " << integerStack.peek() << endl;
+
+        integerStack.pop();
+        cout << "Top element after pop: " << integerStack.peek() << endl;
+
+        cout << "Is stack empty? " << integerStack.isEmpty()  << endl;
+
+        Stack<string> stringStack(3);
+        stringStack.push("World");
+        stringStack.push("Hello");
+
+        cout << "string at top : " << stringStack.peek() << endl;
+        stringStack.pop();
+        
+        cout << "string at top : " << stringStack.peek() << endl;
+
+
+    } catch (const exception& e) {
+        cout << "Exception: " << e.what() << endl;
+    }
 
     return 0;
 }
